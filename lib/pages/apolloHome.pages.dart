@@ -1,5 +1,7 @@
 import 'package:apollo_poc/widgets/historyitem.widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
 
 class ApolloHome extends StatefulWidget {
   const ApolloHome ({ super.key });
@@ -10,11 +12,35 @@ class ApolloHome extends StatefulWidget {
 class _ApolloHomeState extends State<ApolloHome> {
   int currentIndex = 1;
   final PageController _controller = PageController(initialPage: 1);
+  Uint8List? _fileBytes; // Variable to hold the selected file bytes
+  String? _fileName; // Variable to hold the selected file name
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _openFileExplorer() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3'],
+      );
+
+      if (result != null) {
+        setState(() {
+          _fileBytes = result.files.single.bytes;
+          _fileName = result.files.single.name;
+        });
+        print('File picked: $_fileName');
+      } else {
+        // User canceled the picker
+        print('User canceled the picker');
+      }
+    } catch (e) {
+      print('Error while picking the file: $e');
+    }
   }
 
   @override
@@ -99,7 +125,7 @@ class _ApolloHomeState extends State<ApolloHome> {
                         height: 40,
                       ),
                       GestureDetector(
-                        onTap: () => print("Yea"),
+                        onTap: () => print("Yea1"),
                         child: Material(
                           shape: const CircleBorder(),
                           elevation: 8,
@@ -137,7 +163,7 @@ class _ApolloHomeState extends State<ApolloHome> {
                         height: 40,
                       ),
                       GestureDetector(
-                        onTap: () => print("Yea"),
+                        onTap: _openFileExplorer,
                         child: Material(
                           shape: const CircleBorder(),
                           elevation: 8,
