@@ -1,8 +1,11 @@
 import 'package:apollo_poc/widgets/historyitem.widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
 
 class ApolloHome extends StatefulWidget {
-  const ApolloHome ({ super.key });
+  const ApolloHome({super.key});
+
   @override
   State<ApolloHome> createState() => _ApolloHomeState();
 }
@@ -10,11 +13,43 @@ class ApolloHome extends StatefulWidget {
 class _ApolloHomeState extends State<ApolloHome> {
   int currentIndex = 1;
   final PageController _controller = PageController(initialPage: 1);
+  Uint8List? _fileBytes; // Variable to hold the selected file bytes
+  String? _fileName; // Variable to hold the selected file name
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _openFileExplorer() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3'],
+      );
+
+      if (result != null) {
+        setState(() {
+          _fileBytes = result.files.single.bytes;
+          _fileName = result.files.single.name;
+        });
+        print('File picked: $_fileName');
+        _saveFileBytesAsMP3(_fileBytes!, _fileName!);
+      } else {
+        // User canceled the picker
+        print('User canceled the picker');
+      }
+    } catch (e) {
+      print('Error while picking the file: $e');
+    }
+  }
+
+  void _saveFileBytesAsMP3(Uint8List fileBytes, String fileName) {
+    // Save the file bytes to a variable for later use
+    // You can use this variable to pass the file to another program
+    final mp3File = fileBytes;
+    print('File saved as $fileName with ${mp3File.lengthInBytes} bytes.');
   }
 
   @override
@@ -24,24 +59,21 @@ class _ApolloHomeState extends State<ApolloHome> {
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).viewPadding.top, //height of the status bar for every phone seperately
+            height: MediaQuery.of(context).viewPadding.top, // height of the status bar for every phone separately
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              3, 
-              (index) => buildDot(index, context)
-            )
+            children: List.generate(3, (index) => buildDot(index, context)),
           ),
           Expanded(
             child: PageView(
               controller: _controller,
-              onPageChanged: (int index){
+              onPageChanged: (int index) {
                 setState(() {
                   currentIndex = index;
                 });
               },
-              children: [ 
+              children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
@@ -51,40 +83,39 @@ class _ApolloHomeState extends State<ApolloHome> {
                     children: [
                       Expanded(
                         child: ListView(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  top: 50,
-                                  bottom: 20,
-                                ),
-                                child: const Text(
-                                  'History',
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  )
-                                )
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(
+                                top: 50,
+                                bottom: 20,
                               ),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                              HistoryItem(),
-                            ]
+                              child: const Text(
+                                'History',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                            HistoryItem(),
+                          ],
                         ),
                       ),
-                    ]
-                  )
+                    ],
+                  ),
                 ),
                 Container(
-                  // color: const Color.fromARGB(255, 89, 0, 89),
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -93,13 +124,13 @@ class _ApolloHomeState extends State<ApolloHome> {
                     children: [
                       const Text(
                         'Tap to Record',
-                        style: TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none)
+                        style: TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none),
                       ),
                       const SizedBox(
                         height: 40,
                       ),
                       GestureDetector(
-                        onTap: () => print("Yea"),
+                        onTap: () => print("Yea1"),
                         child: Material(
                           shape: const CircleBorder(),
                           elevation: 8,
@@ -108,18 +139,19 @@ class _ApolloHomeState extends State<ApolloHome> {
                             height: 200,
                             width: 200,
                             decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Color.fromARGB(255, 140, 80, 182),
+                              shape: BoxShape.circle,
+                              color: Color.fromARGB(255, 140, 80, 182),
                             ),
                             child: const Icon(
                               Icons.mic,
                               color: Colors.white,
                               size: 100,
-                            )
+                            ),
                           ),
                         ),
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ),
                 Container(
                   color: const Color.fromARGB(255, 89, 0, 89),
@@ -131,13 +163,13 @@ class _ApolloHomeState extends State<ApolloHome> {
                     children: [
                       const Text(
                         'Upload File',
-                        style: TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none)
+                        style: TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none),
                       ),
                       const SizedBox(
                         height: 40,
                       ),
                       GestureDetector(
-                        onTap: () => print("Yea"),
+                        onTap: _openFileExplorer,
                         child: Material(
                           shape: const CircleBorder(),
                           elevation: 8,
@@ -146,38 +178,39 @@ class _ApolloHomeState extends State<ApolloHome> {
                             height: 200,
                             width: 200,
                             decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Color.fromARGB(255, 140, 80, 182),
+                              shape: BoxShape.circle,
+                              color: Color.fromARGB(255, 140, 80, 182),
                             ),
                             child: const Icon(
                               Icons.add,
                               color: Colors.white,
-                              size: 100
-                            )
-                          )
+                              size: 100,
+                            ),
+                          ),
                         ),
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ),
-              ]
+              ],
             ),
           ),
-          const Text('safasfasfasfasfsafs')
-        ]
+          const Text('safasfasfasfasfsafs'),
+        ],
       ),
     );
   }
 
-  //This method builds the dot for the 3 dots below the status bar
+  // This method builds the dot for the 3 dots below the status bar
   Container buildDot(int index, BuildContext context) {
     return Container(
-              height: 10,
-              width: currentIndex == index ? 30 : 10,
-              margin: const EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-              )
-            );
+      height: 10,
+      width: currentIndex == index ? 30 : 10,
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+    );
   }
 }
