@@ -1,5 +1,4 @@
 import 'package:apollo_poc/widgets/historyitem.widgets.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class ApolloHome extends StatefulWidget {
@@ -138,9 +137,7 @@ class _ApolloHomeState extends State<ApolloHome> {
                         height: 40,
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          final res = await FilePicker.platform.pickFiles();
-                        },
+                        onTap: () => print("Yea"),
                         child: Material(
                           shape: const CircleBorder(),
                           elevation: 8,
@@ -165,6 +162,7 @@ class _ApolloHomeState extends State<ApolloHome> {
               ]
             ),
           ),
+          const Text('safasfasfasfasfsafs')
         ]
       ),
     );
