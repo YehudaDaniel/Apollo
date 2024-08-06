@@ -1,6 +1,7 @@
 # apollo_poc
 
-A new Flutter project.
+Apollo Project - Colman deep learning internship project
+identifying sounds and turning it into a music sheet
 
 ## Getting Started
 
