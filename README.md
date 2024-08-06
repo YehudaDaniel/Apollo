@@ -4,15 +4,5 @@ Apollo Project - Colman deep learning internship project
 identifying sounds and turning it into a music sheet
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Poster Apollo](https://github.com/YehudaDaniel/Apollo/blob/main/Screenshot%202024-08-06%20at%2021.26.53.png?raw=true)
 # Apollo
