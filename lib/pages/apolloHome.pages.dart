@@ -5,7 +5,6 @@ import 'package:apollo_poc/widgets/buildUploadView.widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
-import 'dart:io';
 
 class ApolloHome extends StatefulWidget {
   const ApolloHome({super.key});
@@ -17,7 +16,7 @@ class ApolloHome extends StatefulWidget {
 class _ApolloHomeState extends State<ApolloHome> {
   int currentIndex = 1;
   final PageController _controller = PageController(initialPage: 1); // Sets the initial page
-  Future<Uint8List>? _fileBytes; // Variable to hold the selected file bytes
+  Uint8List? _fileBytes; // Variable to hold the selected file bytes
   String? _fileName; // Variable to hold the selected file name
   String? _uploadStatus; // Variable to hold the upload status
 
@@ -86,9 +85,8 @@ class _ApolloHomeState extends State<ApolloHome> {
 
       if (result != null) {
         setState(() {
-          String str = result.files[0].path.toString();
-          _fileBytes = File(str).readAsBytes();
-          _fileName = result.files[0].name;
+          _fileBytes = result.files.first.bytes; // Access bytes directly
+          _fileName = result.files.first.name;
           _uploadStatus = 'File Uploaded'; // Update the upload status here
         });
         print('File picked: $_fileName');
@@ -107,7 +105,7 @@ class _ApolloHomeState extends State<ApolloHome> {
     }
   }
 
-  void _saveFileBytesAsMP3(Future<Uint8List> fileBytes, String fileName) {
+  void _saveFileBytesAsMP3(Uint8List fileBytes, String fileName) {
     // Save the file bytes to a variable for later use
     // You can use this variable to pass the file to another program
     print('File saved as $fileName.');
@@ -120,6 +118,6 @@ class _ApolloHomeState extends State<ApolloHome> {
   }
 
   String getUploadStatus() {
-    return _uploadStatus?? 'No File Selected';
+    return _uploadStatus ?? 'No File Selected';
   }
 }
