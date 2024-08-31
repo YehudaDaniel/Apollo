@@ -9,36 +9,25 @@ Widget buildHistoryView() {
       vertical: 15,
     ),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const Text(
+          'History',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 20),
         Expanded(
-          child: ListView(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 50,
-                  bottom: 20,
-                ),
-                child: const Text(
-                  'History',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-              HistoryItem(),
-            ],
+          child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(
+              color: Colors.white.withOpacity(0.5),
+              thickness: 1,
+            ),
+            itemCount: 10,
+            itemBuilder: (context, index) => HistoryItem(songTitle: 'Song ${index + 1}'),
           ),
         ),
       ],
