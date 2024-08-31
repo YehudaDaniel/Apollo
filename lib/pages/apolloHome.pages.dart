@@ -1,11 +1,13 @@
+import 'dart:typed_data';
 import 'package:apollo_poc/widgets/buildDot.widgets.dart';
 import 'package:apollo_poc/widgets/buildHistoryView.widgets.dart';
 import 'package:apollo_poc/widgets/buildRecordView.widgets.dart';
 import 'package:apollo_poc/widgets/buildUploadView.widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
 import 'dart:io';
+import 'package:apollo_poc/services/http.services.dart';
+import 'package:path/path.dart' as p;
 
 class ApolloHome extends StatefulWidget {
   const ApolloHome({super.key});
@@ -17,7 +19,7 @@ class ApolloHome extends StatefulWidget {
 class _ApolloHomeState extends State<ApolloHome> {
   int currentIndex = 1;
   final PageController _controller = PageController(initialPage: 1); // Sets the initial page
-  Future<Uint8List>? _fileBytes; // Variable to hold the selected file bytes
+  Uint8List? _fileBytes;
   String? _fileName; // Variable to hold the selected file name
   String? _uploadStatus; // Variable to hold the upload status
 
@@ -80,6 +82,7 @@ class _ApolloHomeState extends State<ApolloHome> {
   void _openFileExplorer() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ['mp3', 'wav'],
       );
@@ -87,17 +90,19 @@ class _ApolloHomeState extends State<ApolloHome> {
       if (result != null) {
         setState(() {
           String str = result.files[0].path.toString();
-          _fileBytes = File(str).readAsBytes();
+          _fileBytes = File(str).readAsBytesSync();
           _fileName = result.files[0].name;
           _uploadStatus = 'File Uploaded'; // Update the upload status here
+          HttpServices.sendFileToModel(str, _fileName!);
         });
-        print('File picked: $_fileName');
-        _saveFileBytesAsMP3(_fileBytes!, _fileName!);
+
+        //Read the file as a string
+        // saveFileBytesAsExtensionSpecified(_fileBytes!, _fileName!, result.files[0].path.toString());
+
       } else {
         setState(() {
           _uploadStatus = 'No File Selected'; // Update the upload status here
         });
-        print('User canceled the picker');
       }
     } catch (e) {
       setState(() {
@@ -107,10 +112,18 @@ class _ApolloHomeState extends State<ApolloHome> {
     }
   }
 
-  void _saveFileBytesAsMP3(Future<Uint8List> fileBytes, String fileName) {
-    // Save the file bytes to a variable for later use
-    // You can use this variable to pass the file to another program
-    print('File saved as $fileName.');
+  Future<void> saveFileBytesAsExtensionSpecified(Uint8List fileBytes, String fileName, String path) async {
+    try{
+      if(fileName.endsWith(".wav")) { //is wav file
+        final file = File('${p.dirname(path)}/$fileName.wav');
+        await file.writeAsBytes(fileBytes);
+      }else { //is mp3 file
+        final file = File('${p.dirname(path)}/$fileName.mp3');
+        await file.writeAsBytes(fileBytes);
+      }
+    }catch(e) {
+      print(e);
+    }
   }
 
   void setUploadStatusState(String status) {

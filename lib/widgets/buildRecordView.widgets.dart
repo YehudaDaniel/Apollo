@@ -85,8 +85,8 @@ class _BuildRecordViewState extends State<BuildRecordView> {
           ),
           const SizedBox(height: 40),
           AvatarGlow(
-            glowCount: _isRecording ? 3 : 2,
-            glowRadiusFactor: _isRecording ? 0.3 : 0.1,
+            glowCount: _isRecording ? 2 : 3,
+            glowRadiusFactor: _isRecording ? 0.3 : 0.2,
             animate: true,
             child: GestureDetector(
               onTap: () async {

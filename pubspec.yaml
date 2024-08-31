@@ -39,6 +39,8 @@ dependencies:
   avatar_glow: ^3.0.1
   record: ^5.1.2
   audioplayers: ^6.0.0
+  http: ^1.2.2
+  dio: ^5.6.0
 
 dev_dependencies:
   flutter_test:
