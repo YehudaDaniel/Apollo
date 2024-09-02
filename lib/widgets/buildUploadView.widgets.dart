@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 
 class BuildUploadView extends StatefulWidget {
@@ -30,7 +31,7 @@ class _BuildUploadViewState extends State<BuildUploadView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
           ],
           const Text(
             'Upload File',
@@ -39,27 +40,32 @@ class _BuildUploadViewState extends State<BuildUploadView> {
           const SizedBox(
             height: 40,
           ),
-          GestureDetector(
-            onTap: () => widget.openFileExplorer(),
-            child: Material(
-              shape: const CircleBorder(),
-              elevation: 8,
-              child: Container(
-                padding: const EdgeInsets.all(40),
-                height: 200,
-                width: 200,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/photos/main_btn.png'),
-                    fit: BoxFit.fill,
+          AvatarGlow(
+            glowCount: 3,
+            glowRadiusFactor: 0.2,
+            animate: true,
+            child: GestureDetector(
+              onTap: () => widget.openFileExplorer(),
+              child: Material(
+                shape: const CircleBorder(),
+                elevation: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(40),
+                  height: 200,
+                  width: 200,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/photos/main_btn.png'),
+                      fit: BoxFit.fill,
+                    ),
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 140, 80, 182),
                   ),
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 140, 80, 182),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 100,
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 100,
+                  ),
                 ),
               ),
             ),
