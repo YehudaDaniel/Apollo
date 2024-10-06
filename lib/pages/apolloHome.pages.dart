@@ -18,7 +18,7 @@ class ApolloHome extends StatefulWidget {
 
 class _ApolloHomeState extends State<ApolloHome> {
   int currentIndex = 1;
-  final PageController _controller = PageController(initialPage: 1); // Sets the initial page
+  final PageController _controller = PageController(initialPage: 0); // Sets the initial page
   Uint8List? _fileBytes;
   String? _fileName; // Variable to hold the selected file name
   String? _uploadStatus; // Variable to hold the upload status
@@ -49,7 +49,7 @@ class _ApolloHomeState extends State<ApolloHome> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(3, (index) => buildDot(currentIndex, index, context)),
+              children: List.generate(2, (index) => buildDot(currentIndex, index, context)),
             ),
         // ----------------------------------------------------------------
             Expanded(
@@ -65,14 +65,13 @@ class _ApolloHomeState extends State<ApolloHome> {
                   });
                 },
                 children: [
-                  buildHistoryView(),
+                  // buildHistoryView(),
                   BuildRecordView(),
                   // ----------------------------------------------------------------
                   BuildUploadView(openFileExplorer: _openFileExplorer, uploadStatus: _uploadStatus,),
                 ],
               ),
             ),
-            const Text('safasfasfasfasfsafs'),
           ],
         ),
       ),
@@ -93,7 +92,6 @@ class _ApolloHomeState extends State<ApolloHome> {
           _fileBytes = File(str).readAsBytesSync();
           _fileName = result.files[0].name;
           _uploadStatus = 'File Uploaded'; // Update the upload status here
-          HttpServices.sendFileToModel(str, _fileName!);
         });
 
         //Read the file as a string
